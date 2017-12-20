@@ -1,5 +1,6 @@
 im = (imread('TP/im/simpson512.png')); 
-nbSuperPixelsWanted = 100
+nbSuperPixelsWanted = 100;
+radius = 70;
 %this step computes and return the super pixels
 %L is the matrix which has the same size as the image, each value
 %correspond to the superpixel the pixel belongs
@@ -38,6 +39,8 @@ theta = angleBetweenCentre(centr,13,2);
 
 argmin =minimumAngle(13,2,centr,nei);
 
+SuperPatch = getSuperPatch(centr,radius);
+
 function nei=neighboors(i,graph)
 a = graph.Edges.EndNodes(graph.Edges.EndNodes(:,2)==i,1);
 b = graph.Edges.EndNodes(graph.Edges.EndNodes(:,1)==i,2);
@@ -57,7 +60,7 @@ if theta < 0
 end
 end
 
-%etant donn� theta_i_i' on cherche parmis neighboors le super pixel k
+%etant donne theta_i_i' on cherche parmis neighboors le super pixel k
 %qui minimise abs(theta_i_i'+pi-theta_i'_k)
 function argmin=minimumAngle(i,theta,centre,Neighboors)
 min = 4.5;
@@ -70,4 +73,21 @@ for k = Neighboors
        argmin=k;
     end
 end
+end
+
+%very naive
+%renvoie cell array, superPatch{i} donne la liste des label des superpixels
+%contenu dans le superpatch de centre le superpixel-i
+function superPatch=getSuperPatch(centre,r)
+    [n,d]= size(centre);
+    superPatch = {};
+    for i = 1:n 
+        l = [];
+        for j = 1:n
+           if(norm(centre(i).Centroid - centre(j).Centroid) <= r)
+               l = [l j];
+           end
+        end
+        superPatch{i}=l;
+    end
 end
