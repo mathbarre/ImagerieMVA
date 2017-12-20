@@ -35,59 +35,12 @@ centr = regionprops(L,'centroid');
 g = adjacentRegionsGraph(L);
 
 nei = neighboors(13,g);
-theta = angleBetweenCentre(centr,13,2);
+%theta = angleBetweenCentre(centr,13,2);
 
 argmin =minimumAngle(13,2,centr,nei);
 
 SuperPatch = getSuperPatch(centr,radius);
 
-function nei=neighboors(i,graph)
-a = graph.Edges.EndNodes(graph.Edges.EndNodes(:,2)==i,1);
-b = graph.Edges.EndNodes(graph.Edges.EndNodes(:,1)==i,2);
-nei = transpose(cat(1,a,b));
-end
 
-function theta =angle2d(u,v)
-theta =atan2(u(1)*v(2)-u(2)*v(1),dot(u,v));
-end
 
-%calcul le theta_i_i' du papier SuperPatch Match
-function theta = angleBetweenCentre(centre,i,iprime)
-p = centre(iprime).Centroid - centre(i).Centroid;
-theta = angle2d([0,1],[p(2),p(1)]);
-if theta < 0
-    theta = 2*pi+theta;
-end
-end
 
-%etant donne theta_i_i' on cherche parmis neighboors le super pixel k
-%qui minimise abs(theta_i_i'+pi-theta_i'_k)
-function argmin=minimumAngle(i,theta,centre,Neighboors)
-min = 4.5;
-argmin = i;
-for k = Neighboors
-    theta_k = angleBetweenCentre(centre,i,k);
-    min_k =abs(theta+pi-theta_k);
-    if min_k <= min
-       min = min_k;
-       argmin=k;
-    end
-end
-end
-
-%very naive
-%renvoie cell array, superPatch{i} donne la liste des label des superpixels
-%contenu dans le superpatch de centre le superpixel-i
-function superPatch=getSuperPatch(centre,r)
-    [n,d]= size(centre);
-    superPatch = {};
-    for i = 1:n 
-        l = [];
-        for j = 1:n
-           if(norm(centre(i).Centroid - centre(j).Centroid) <= r)
-               l = [l j];
-           end
-        end
-        superPatch{i}=l;
-    end
-end
