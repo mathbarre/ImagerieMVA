@@ -1,5 +1,10 @@
 im = (imread('TP/im/simpson512.png')); 
-[L,N] = superpixels(im,100);
+nbSuperPixelsWanted = 100
+%this step computes and return the super pixels
+%L is the matrix which has the same size as the image, each value
+%correspond to the superpixel the pixel belongs
+%N is the number of superpixels actually computed
+[L,N] = superpixels(im, nbSuperPixelsWanted);
 im(28,34,:) = 255;
 im(55,79,:) = 255;
 im(94,99,:) = 255;
@@ -52,7 +57,7 @@ if theta < 0
 end
 end
 
-%etant donné theta_i_i' on cherche parmis neighboors le super pixel k
+%etant donnï¿½ theta_i_i' on cherche parmis neighboors le super pixel k
 %qui minimise abs(theta_i_i'+pi-theta_i'_k)
 function argmin=minimumAngle(i,theta,centre,Neighboors)
 min = 4.5;
