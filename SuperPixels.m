@@ -21,7 +21,7 @@ numCols = size(im,2);
 for labelVal = 1:N
     redIdx = idx{labelVal};
     greenIdx = idx{labelVal}+numRows*numCols;
-    blueIdx = idx{labelVal}+2*numRows*numCols;
+    blueIdx = idx{labelVal}+2*numRows*numCols;1
     outputImage(redIdx) = mean(im(redIdx));
     outputImage(greenIdx) = mean(im(greenIdx));
     outputImage(blueIdx) = mean(im(blueIdx));
@@ -41,6 +41,52 @@ argmin =minimumAngle(13,2,centr,nei);
 
 SuperPatch = getSuperPatch(centr,radius);
 
+outputImage = im;
+idx = label2idx(L);
+numRows = size(im,1);
+numCols = size(im,2);
 
+listLabelVal = 33
+for labelVal = listLabelVal
+    redIdx = idx{labelVal};
+    greenIdx = idx{labelVal}+numRows*numCols;
+    blueIdx = idx{labelVal}+2*numRows*numCols;1
+    outputImage(redIdx) = 255;
+    outputImage(greenIdx) = 255;
+    outputImage(blueIdx) = 255;
+end
 
+figure;
+imshow(outputImage)
 
+labelSuperPixelCentralA = 3 
+labelSuperPixelCentralB = 67
+superPatchA = SuperPatch{labelSuperPixelCentralA};
+superPatchB = SuperPatch{labelSuperPixelCentralB};
+centerA = centr;
+centerB = centr;
+imageA=im;
+imageB = im;
+idxA = idx;
+idxB = idx;
+sigma21 = 0.01;
+sigma22 = 0.01;
+res = distanceSuperPatchL2(superPatchA, superPatchB, labelSuperPixelCentralA ,...
+   labelSuperPixelCentralB, centerA, centerB, imageA, imageB, idxA, idxB, sigma21, sigma22);
+res
+
+labelSuperPixelCentralA = 3 
+labelSuperPixelCentralB = 20
+superPatchA = SuperPatch{labelSuperPixelCentralA};
+superPatchB = SuperPatch{labelSuperPixelCentralB};
+centerA = centr;
+centerB = centr;
+imageA=im;
+imageB = im;
+idxA = idx;
+idxB = idx;
+sigma21 = 0.01;
+sigma22 = 0.01;
+res = distanceSuperPatchL2(superPatchA, superPatchB, labelSuperPixelCentralA ,...
+   labelSuperPixelCentralB, centerA, centerB, imageA, imageB, idxA, idxB, sigma21, sigma22);
+res
