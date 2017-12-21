@@ -1,6 +1,6 @@
 function dist = distanceSuperPatchL2(superPatchA, superPatchB, labelSuperPixelCentralA,labelSuperPixelCentralB, centerA, centerB, imageA, imageB, idxA, idxB)
-    sigma21 = 0.01
-    sigma22 = 0.01
+    sigma21 = 0.01;
+    sigma22 = 0.01;
     ci = centerA(labelSuperPixelCentralA).Centroid;
     cj = centerB(labelSuperPixelCentralB).Centroid;
     [~, n] = size(superPatchA);
