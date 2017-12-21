@@ -91,6 +91,8 @@ res = distanceSuperPatchL2(superPatchA, superPatchB, labelSuperPixelCentralA ,..
 res
 
 [matchA,matchB] = InitializeMatching(99,99);
-[matchA,matchB] = propagationStep(imageA,imageB,g,g,centerA,centerB,superPatchA,superPatchB,idxA,idxB,matchA,matchB,1);
-
-
+[matchA,matchB] = propagationStep(imageA,imageB,g,g,centerA,centerB,SuperPatch,SuperPatch,idxA,idxB,matchA,matchB,1);
+[matchA,matchB] = propagationStep(imageA,imageB,g,g,centerA,centerB,SuperPatch,SuperPatch,idxA,idxB,matchA,matchB,1);
+[matchA,matchB] = propagationStep(imageA,imageB,g,g,centerA,centerB,SuperPatch,SuperPatch,idxA,idxB,matchA,matchB,1);
+[matchA,matchB] = propagationStep(imageA,imageB,g,g,centerA,centerB,SuperPatch,SuperPatch,idxA,idxB,matchA,matchB,1);
+[matchA,matchB] = propagationStep(imageA,imageB,g,g,centerA,centerB,SuperPatch,SuperPatch,idxA,idxB,matchA,matchB,1);
