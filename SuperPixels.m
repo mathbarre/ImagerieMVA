@@ -21,7 +21,7 @@ numCols = size(im,2);
 for labelVal = 1:N
     redIdx = idx{labelVal};
     greenIdx = idx{labelVal}+numRows*numCols;
-    blueIdx = idx{labelVal}+2*numRows*numCols;1
+    blueIdx = idx{labelVal}+2*numRows*numCols;
     outputImage(redIdx) = mean(im(redIdx));
     outputImage(greenIdx) = mean(im(greenIdx));
     outputImage(blueIdx) = mean(im(blueIdx));
@@ -46,7 +46,7 @@ idx = label2idx(L);
 numRows = size(im,1);
 numCols = size(im,2);
 
-listLabelVal = [33, 65]
+listLabelVal = [33, 65];
 for labelVal = listLabelVal
     redIdx = idx{labelVal};
     greenIdx = idx{labelVal}+numRows*numCols;
