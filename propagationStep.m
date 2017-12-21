@@ -1,7 +1,7 @@
 function [newMatchA,newMatchB]=propagationStep(imA,imB,graphA,graphB,centreA,centreB,SuperPatchsA,SuperPatchsB,idxA,idxB,matchA,matchB,epsilon)
 
 [~,nbSuperPatchsA] = size(SuperPatchsA);
-[~,nbSuperPatchsB] = size(SuperPatchsB);
+
 
 newMatchA=matchA;
 newMatchB=matchB;
@@ -10,16 +10,16 @@ for i = 1:nbSuperPatchsA
    neighboorsA = neighboors(i,graphA);
    for nei = neighboorsA
        if nei < i
-          [newMatchA,newMatchB]= permutMatch(imA,imB,graphB,idxA,idxB,i,nei,centreA,centreB,epsilon,newMatchA,newMatchB,superPatchsA,SuperPatchsB);
+          [newMatchA,newMatchB]= permutMatch(imA,imB,graphB,idxA,idxB,i,nei,centreA,centreB,epsilon,newMatchA,newMatchB,SuperPatchsA,SuperPatchsB);
        end
    end
 end
 
-for j = 1:nbSuperPatchsA
-   neighboorsA = neighboors(i,graphA);
+for j = fliplr(1:nbSuperPatchsA)
+   neighboorsA = neighboors(j,graphA);
    for nei = neighboorsA
-       if nei < i
-          [newMatchA,newMatchB]= permutMatch(imA,imB,graphB,idxA,idxB,i,nei,centreA,centreB,epsilon,newMatchA,newMatchB,superPatchsA,SuperPatchsB);
+       if nei > j
+          [newMatchA,newMatchB]= permutMatch(imA,imB,graphB,idxA,idxB,j,nei,centreA,centreB,epsilon,newMatchA,newMatchB,superPatchsA,SuperPatchsB);
        end
    end
 end
@@ -36,8 +36,8 @@ function [newMatchA,newMatchB]=permutMatch(imA,imB,graphB,idxA,idxB,superpixelA,
     matchSuperPixelAInB = matchA(superpixelA); %le label du superPatch = label du superPixel matché à superPixelA 
     neighboorsMatchSuperPixelAInB = neighboors(matchSuperPixelAInB,graphB); % les voisins du superPixel precedent
     goodOrientationB = minimumAngle(matchSuperPixelAInB,theta,neighboorsMatchSuperPixelAInB); % le superPixel de B qui correspond à la meilleur orientation
-    newDist = distanceSuperPatchL2(SuperPatchsA{superpixelA},SuperPatchsB{goodOrientationB});% nouvelle distance entre patchs centrés en superpixelA et goodOrientationB
-    DistA = distanceSuperPatchL2(SuperPatchsA{superpixelA},SuperPatchsA{matchSuperPixelAInB});
+    newDist = distanceSuperPatchL2(SuperPatchsA{superpixelA},SuperPatchsB{goodOrientationB},superpixelA,goodOrientationB, centreA, centreB, imA, imB, idxA, idxB);% nouvelle distance entre patchs centrés en superpixelA et goodOrientationB
+    DistA = distanceSuperPatchL2(SuperPatchsA{superpixelA},SuperPatchsA{matchSuperPixelAInB},superpixelA,matchSuperPixelAInB, centreA, centreB, imA, imB, idxA, idxB);
     if(newDist < DistA )
        [~,eps] =  size(matchB{goodOrientationB});
        if (eps < epsilon)%on met goodOrientation comme match pour superPixelsA et on enlève superpixelA de la liste des patch matché avec matchSuperPixelAInB
@@ -48,7 +48,7 @@ function [newMatchA,newMatchB]=permutMatch(imA,imB,graphB,idxA,idxB,superpixelA,
            cost = 100000;
            argmin = 0;
            for SwitchCandidate = matchB{goodOrientationB}
-               switchCost = SwitchingCost(SuperPatchA,SuperPatchB,matchA,superPixelA,SwitchCandidate,newDist,DistA);
+               switchCost = SwitchingCost(SuperPatchA,SuperPatchB,matchA,superPixelA,SwitchCandidate,newDist,DistA,centreA, centreB, imA, imB, idxA, idxB);
                if(switchCost < cost)
                   cost = switchCost;
                   argmin = SwitchCandidate;
@@ -66,8 +66,8 @@ function [newMatchA,newMatchB]=permutMatch(imA,imB,graphB,idxA,idxB,superpixelA,
     end
 end
 
-function Cost = SwitchingCost(SuperPatchA,SuperPatchB,matchA,superpixel1,superpixel2,dist1_2,dist1_1)
+function Cost = SwitchingCost(SuperPatchA,SuperPatchB,matchA,superpixel1,superpixel2,dist1_2,dist1_1, centreA, centreB, imA, imB, idxA, idxB)
     Cost = dist1_2 -dist1_1...
-        + distanceSuperPatchL2(SuperPatchA{superpixel2},SuperPatchB(matchA(superpixel1))) ...
-        - distanceSuperPatchL2(SuperPatchA{superpixel2},SuperPatchB{matchA(superpixel2)});
+        + distanceSuperPatchL2(SuperPatchA{superpixel2},SuperPatchB(matchA(superpixel1)),superpixel1,matchA(superpixel2), centreA, centreB, imA, imB, idxA, idxB) ...
+        - distanceSuperPatchL2(SuperPatchA{superpixel2},SuperPatchB{matchA(superpixel2)},superpixel2,matchA(superpixel2), centreA, centreB, imA, imB, idxA, idxB);
 end

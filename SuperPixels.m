@@ -50,7 +50,7 @@ listLabelVal = [33, 65]
 for labelVal = listLabelVal
     redIdx = idx{labelVal};
     greenIdx = idx{labelVal}+numRows*numCols;
-    blueIdx = idx{labelVal}+2*numRows*numCols;1
+    blueIdx = idx{labelVal}+2*numRows*numCols;
     outputImage(redIdx) = 255;
     outputImage(greenIdx) = 255;
     outputImage(blueIdx) = 255;
@@ -58,8 +58,8 @@ end
 figure;
 imshow(outputImage)
 
-labelSuperPixelCentralA = 33
-labelSuperPixelCentralB = 65
+labelSuperPixelCentralA = 33;
+labelSuperPixelCentralB = 65;
 superPatchA = SuperPatch{labelSuperPixelCentralA};
 superPatchB = SuperPatch{labelSuperPixelCentralB};
 centerA = centr;
@@ -74,8 +74,8 @@ res = distanceSuperPatchL2(superPatchA, superPatchB, labelSuperPixelCentralA ,..
    labelSuperPixelCentralB, centerA, centerB, imageA, imageB, idxA, idxB);
 res
 
-labelSuperPixelCentralA = 3 
-labelSuperPixelCentralB = 20
+labelSuperPixelCentralA = 3 ;
+labelSuperPixelCentralB = 20;
 superPatchA = SuperPatch{labelSuperPixelCentralA};
 superPatchB = SuperPatch{labelSuperPixelCentralB};
 centerA = centr;
@@ -89,4 +89,8 @@ sigma22 = 0.01;
 res = distanceSuperPatchL2(superPatchA, superPatchB, labelSuperPixelCentralA ,...
    labelSuperPixelCentralB, centerA, centerB, imageA, imageB, idxA, idxB);
 res
+
+[matchA,matchB] = InitializeMatching(99,99);
+[matchA,matchB] = propagationStep(imageA,imageB,g,g,centerA,centerB,superPatchA,superPatchB,idxA,idxB,matchA,matchB,1);
+
 
