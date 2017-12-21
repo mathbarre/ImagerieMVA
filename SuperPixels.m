@@ -46,7 +46,7 @@ idx = label2idx(L);
 numRows = size(im,1);
 numCols = size(im,2);
 
-listLabelVal = 33
+listLabelVal = [33, 65]
 for labelVal = listLabelVal
     redIdx = idx{labelVal};
     greenIdx = idx{labelVal}+numRows*numCols;
@@ -55,12 +55,11 @@ for labelVal = listLabelVal
     outputImage(greenIdx) = 255;
     outputImage(blueIdx) = 255;
 end
-
 figure;
 imshow(outputImage)
 
-labelSuperPixelCentralA = 3 
-labelSuperPixelCentralB = 67
+labelSuperPixelCentralA = 33
+labelSuperPixelCentralB = 65
 superPatchA = SuperPatch{labelSuperPixelCentralA};
 superPatchB = SuperPatch{labelSuperPixelCentralB};
 centerA = centr;
@@ -72,7 +71,7 @@ idxB = idx;
 sigma21 = 0.01;
 sigma22 = 0.01;
 res = distanceSuperPatchL2(superPatchA, superPatchB, labelSuperPixelCentralA ,...
-   labelSuperPixelCentralB, centerA, centerB, imageA, imageB, idxA, idxB, sigma21, sigma22);
+   labelSuperPixelCentralB, centerA, centerB, imageA, imageB, idxA, idxB);
 res
 
 labelSuperPixelCentralA = 3 
@@ -88,5 +87,5 @@ idxB = idx;
 sigma21 = 0.01;
 sigma22 = 0.01;
 res = distanceSuperPatchL2(superPatchA, superPatchB, labelSuperPixelCentralA ,...
-   labelSuperPixelCentralB, centerA, centerB, imageA, imageB, idxA, idxB, sigma21, sigma22);
+   labelSuperPixelCentralB, centerA, centerB, imageA, imageB, idxA, idxB);
 res
