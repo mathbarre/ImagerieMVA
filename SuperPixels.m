@@ -90,3 +90,4 @@ sigma22 = 0.01;
 res = distanceSuperPatchL2(superPatchA, superPatchB, labelSuperPixelCentralA ,...
    labelSuperPixelCentralB, centerA, centerB, imageA, imageB, idxA, idxB, sigma21, sigma22);
 res
+
