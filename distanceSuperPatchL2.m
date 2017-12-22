@@ -1,6 +1,9 @@
 function dist = distanceSuperPatchL2(SuperPixelCentralA,SuperPixelCentralB,A,B)
-    sigma21 = 0.01;
-    sigma22 = 0.01;
+    [h,w,~] = size(A.im);
+    [~,K] = size(A.SuperPatchs);
+    sigma21 = h*w/K/4;
+    global R;
+    sigma22 = 2*R^2;
     ci = A.centre(SuperPixelCentralA).Centroid;
     cj = B.centre(SuperPixelCentralB).Centroid;
     [~, n] = size(A.SuperPatchs{SuperPixelCentralA});
@@ -44,8 +47,9 @@ function dist = distanceSuperPixelL2(labelSuperPixelA, labelSuperPixelB,A,B)
         histA = getHist(labelSuperPixelA,A,  color);  
         histB = getHist(labelSuperPixelB,B,  color) ;
         diff2 = (histA - histB).^2;
-        dist = dist + mean(diff2);
+        dist = dist + sum(diff2);
     end
+    dist = sqrt(dist);
 end
 
  function histo = getHist(labelSuperPixel,A,  n)

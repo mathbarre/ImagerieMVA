@@ -30,15 +30,31 @@ for i = 1:nbSuperPatchsA
        end
    end
 end
+for j = fliplr(1:nbSuperPatchsA)
+   neighboorsA = neighboors(j,A.graph);
+   for nei = neighboorsA
+       if nei > j
+          [newMatchForA,oldMatchToSwitch]= permutMatch(A,B,j,nei,epsilon,newMatchA,newMatchB);
+          if newMatchForA ~= -1
+              if oldMatchToSwitch == -1
+                  matchedSuperPixelAInB = newMatchA(j);
+                  newMatchA(j) = newMatchForA;
+                  newMatchB{newMatchForA} = [newMatchB{newMatchForA},j];
+                  newMatchB{matchedSuperPixelAInB} = newMatchB{matchedSuperPixelAInB}((newMatchB{matchedSuperPixelAInB}~=j));
+              else
+                  matchSuperPixelAInB = newMatchA(j);
+                  newMatchA(oldMatchToSwitch) = matchSuperPixelAInB;
+                  newMatchA(j) = newMatchForA;
+                  newMatchB{newMatchForA} = [newMatchB{newMatchForA},j];
+                  newMatchB{newMatchForA} = newMatchB{newMatchForA}((newMatchB{newMatchForA}~=oldMatchToSwitch));
+                  newMatchB{matchSuperPixelAInB} = [newMatchB{matchSuperPixelAInB},oldMatchToSwitch];
+                  newMatchB{matchSuperPixelAInB} = newMatchB{matchSuperPixelAInB}((newMatchB{matchSuperPixelAInB}~=j));
+              end
+          end
+       end
+   end
+end
 
-%for j = fliplr(1:nbSuperPatchsA)
-%   neighboorsA = neighboors(j,graphA);
-%   for nei = neighboorsA
-%       if nei > j
-%          [newMatchA,newMatchB]= permutMatch(imA,imB,graphB,idxA,idxB,j,nei,centreA,centreB,epsilon,newMatchA,newMatchB,SuperPatchsA,SuperPatchsB);
-%       end
-%   end
-%end
 
 end
 
