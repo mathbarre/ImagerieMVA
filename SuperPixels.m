@@ -41,58 +41,38 @@ argmin =minimumAngle(13,2,centr,nei);
 
 SuperPatch = getSuperPatch(centr,radius);
 
-outputImage = im;
-idx = label2idx(L);
-numRows = size(im,1);
-numCols = size(im,2);
+% outputImage = im;
+% idx = label2idx(L);
+% numRows = size(im,1);
+% numCols = size(im,2);
+% 
+% listLabelVal = [33, 65];
+% for labelVal = listLabelVal
+%     redIdx = idx{labelVal};
+%     greenIdx = idx{labelVal}+numRows*numCols;
+%     blueIdx = idx{labelVal}+2*numRows*numCols;
+%     outputImage(redIdx) = 255;
+%     outputImage(greenIdx) = 255;
+%     outputImage(blueIdx) = 255;
+% end
+% figure;
+% imshow(outputImage)
 
-listLabelVal = [33, 65];
-for labelVal = listLabelVal
-    redIdx = idx{labelVal};
-    greenIdx = idx{labelVal}+numRows*numCols;
-    blueIdx = idx{labelVal}+2*numRows*numCols;
-    outputImage(redIdx) = 255;
-    outputImage(greenIdx) = 255;
-    outputImage(blueIdx) = 255;
-end
-figure;
-imshow(outputImage)
+A = struct;
+A.im = im;
+A.graph = g;
+A.centre = centr;
+A.idx=idx;
+A.SuperPatchs =SuperPatch;
+B = struct;
+B.im = im;
+B.graph = g;
+B.centre = centr;
+B.idx=idx;
+B.SuperPatchs =SuperPatch;
 
-labelSuperPixelCentralA = 33;
-labelSuperPixelCentralB = 65;
-superPatchA = SuperPatch{labelSuperPixelCentralA};
-superPatchB = SuperPatch{labelSuperPixelCentralB};
-centerA = centr;
-centerB = centr;
-imageA=im;
-imageB = im;
-idxA = idx;
-idxB = idx;
-sigma21 = 0.01;
-sigma22 = 0.01;
-res = distanceSuperPatchL2(superPatchA, superPatchB, labelSuperPixelCentralA ,...
-   labelSuperPixelCentralB, centerA, centerB, imageA, imageB, idxA, idxB);
-res
+[matchA,matchB] = InitializeMatching(N,N);
+[matchA,matchB] = propagationStep(A,B,1,matchA,matchB);
 
-labelSuperPixelCentralA = 3 ;
-labelSuperPixelCentralB = 20;
-superPatchA = SuperPatch{labelSuperPixelCentralA};
-superPatchB = SuperPatch{labelSuperPixelCentralB};
-centerA = centr;
-centerB = centr;
-imageA=im;
-imageB = im;
-idxA = idx;
-idxB = idx;
-sigma21 = 0.01;
-sigma22 = 0.01;
-res = distanceSuperPatchL2(superPatchA, superPatchB, labelSuperPixelCentralA ,...
-   labelSuperPixelCentralB, centerA, centerB, imageA, imageB, idxA, idxB);
-res
 
-[matchA,matchB] = InitializeMatching(99,99);
-[matchA,matchB] = propagationStep(imageA,imageB,g,g,centerA,centerB,SuperPatch,SuperPatch,idxA,idxB,matchA,matchB,1);
-[matchA,matchB] = propagationStep(imageA,imageB,g,g,centerA,centerB,SuperPatch,SuperPatch,idxA,idxB,matchA,matchB,1);
-[matchA,matchB] = propagationStep(imageA,imageB,g,g,centerA,centerB,SuperPatch,SuperPatch,idxA,idxB,matchA,matchB,1);
-[matchA,matchB] = propagationStep(imageA,imageB,g,g,centerA,centerB,SuperPatch,SuperPatch,idxA,idxB,matchA,matchB,1);
-[matchA,matchB] = propagationStep(imageA,imageB,g,g,centerA,centerB,SuperPatch,SuperPatch,idxA,idxB,matchA,matchB,1);
+
