@@ -7,7 +7,6 @@ function dist = distanceSuperPatchL2(SuperPixelCentralA,SuperPixelCentralB,A,B)
     [~, m] = size(B.SuperPatchs{SuperPixelCentralB});
     weigthMatrix = zeros(n,m);
     weightTimeDistBetweenPixelsMatrix = zeros(n,m);
-    
     for iPrime = 1:n
         labelSuperPixelA = A.SuperPatchs{SuperPixelCentralA}(iPrime);
         for jPrime = 1:m

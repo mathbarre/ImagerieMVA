@@ -1,6 +1,6 @@
 im = (imread('TP/im/simpson512.png')); 
 nbSuperPixelsWanted = 100;
-radius = 70;
+radius = 50;
 %this step computes and return the super pixels
 %L is the matrix which has the same size as the image, each value
 %correspond to the superpixel the pixel belongs
