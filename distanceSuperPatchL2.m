@@ -17,7 +17,7 @@ function dist = distanceSuperPatchL2(SuperPixelCentralA,SuperPixelCentralB,A,B)
             ciPrime = A.centre(labelSuperPixelA).Centroid;
             cjPrime = B.centre(labelSuperPixelB).Centroid;
             weigthMatrix(iPrime,jPrime) = weightSuperPixels(ci, cj, ciPrime, cjPrime, sigma21, sigma22);
-            distSuperPixel = distanceSuperPixelL2(labelSuperPixelA, labelSuperPixelB,A,B);
+            distSuperPixel =checkDistanceSuperpixel(labelSuperPixelA, labelSuperPixelB,A,B);
             weightTimeDistBetweenPixelsMatrix(iPrime,jPrime) =  weigthMatrix(iPrime,jPrime) *distSuperPixel ;
         end
     end
@@ -62,6 +62,14 @@ end
     histo = cumsum(imhisto); 
  end
 
- 
+ function Distance=checkDistanceSuperpixel(superpixelA, superpixelB,A,B)
+    global distanceSuperPixelMatrix;
+     if distanceSuperPixelMatrix(superpixelA,superpixelB) == -1 
+        Distance = distanceSuperPixelL2(superpixelA,superpixelB,A,B);
+        distanceSuperPixelMatrix(superpixelA,superpixelB) = Distance;
+    else 
+        Distance = distanceSuperPixelMatrix(superpixelA,superpixelB);
+    end
+ end
     
     

@@ -34,13 +34,13 @@ oldMatchToSwitch = -1;
 matchSuperPixelAInB = matchA(superpixelA);
 [n,m,~] = size(B.im);
 c = B.centre(matchSuperPixelAInB).Centroid;
-w = min([(n-c(2)),(c(2)-1),(m-c(1)),(c(1)-1)]);
+w = [min([(m-c(1)),(c(1)-1)]),min([(n-c(2)),(c(2)-1)])];
 DistA = CheckDistance(superpixelA,matchSuperPixelAInB,A,B);
 minDist = DistA;
 finalCandidate = -1;
 for i = 1:nbOfRandomCandidate
     u = 2*rand([1,2])-1;
-    candidate = floor(c+scale*w*u);
+    candidate = floor(c+scale*w.*u);
     superpixelCandidate = B.L(candidate(2),candidate(1));
     newDist = CheckDistance(superpixelA,superpixelCandidate,A,B);
     if(newDist < minDist )
