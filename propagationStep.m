@@ -7,7 +7,7 @@ newMatchA=matchA;
 newMatchB=matchB;
 
 for i = 1:nbSuperPatchsA
-   neighboorsA = neighboors(i,A.graph);
+   neighboorsA = A.graph{i};
    for nei = neighboorsA
        if nei < i
           [newMatchForA,oldMatchToSwitch]= permutMatch(A,B,i,nei,epsilon,newMatchA,newMatchB);
@@ -31,7 +31,7 @@ for i = 1:nbSuperPatchsA
    end
 end
 for j = fliplr(1:nbSuperPatchsA)
-   neighboorsA = neighboors(j,A.graph);
+   neighboorsA = A.graph{j};
    for nei = neighboorsA
        if nei > j
           [newMatchForA,oldMatchToSwitch]= permutMatch(A,B,j,nei,epsilon,newMatchA,newMatchB);
@@ -68,7 +68,7 @@ function [newMatchForA,oldMatchToSwitch]=permutMatch(A,B,superpixelA,neighboorA,
     
     theta = angleBetweenCentre(A.centre,superpixelA,neighboorA); % angle i_i'
     matchSuperPixelAInB = matchA(superpixelA); %le label du superPatch = label du superPixel matché à superPixelA 
-    neighboorsMatchSuperPixelAInB = neighboors(matchSuperPixelAInB,B.graph); % les voisins du superPixel precedent
+    neighboorsMatchSuperPixelAInB = B.graph{matchSuperPixelAInB}; % les voisins du superPixel precedent
     
     goodOrientationB = minimumAngle(matchSuperPixelAInB,theta,B.centre,neighboorsMatchSuperPixelAInB); % le superPixel de B qui correspond à la meilleur orientation
     newDist = CheckDistance(superpixelA,goodOrientationB,A,B);% nouvelle distance entre patchs centrés en superpixelA et goodOrientationB

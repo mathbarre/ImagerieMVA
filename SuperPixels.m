@@ -55,20 +55,20 @@ imshow(outputImageB)
 centr = regionprops(L,'centroid');
 g = adjacentRegionsGraph(L);
 
-nei = neighboors(67,g);
-theta = angleBetweenCentre(centr,83,67);
+%nei = neighboors(67,g);
+%theta = angleBetweenCentre(centr,83,67);
 
-argmin =minimumAngle(1,2.1,centr,neighboors(1,g));
+%argmin =minimumAngle(1,2.1,centr,neighboors(1,g));
 
 SuperPatch = getSuperPatch(centr,R);
 
 centrB = regionprops(LB,'centroid');
 gB = adjacentRegionsGraph(LB);
 
-neiB = neighboors(13,gB);
-thetaB = angleBetweenCentre(centrB,13,1);
+%neiB = neighboors(13,gB);
+%thetaB = angleBetweenCentre(centrB,13,1);
 
-argminB =minimumAngle(101,4.8,centrB,neighboors(101,gB));
+%argminB =minimumAngle(101,4.8,centrB,neighboors(101,gB));
 
 SuperPatchB = getSuperPatch(centrB,R);
 
@@ -76,14 +76,14 @@ SuperPatchB = getSuperPatch(centrB,R);
 A = struct;
 A.im = im;
 A.L = L;
-A.graph = g;
+A.graph = neighboors(g);
 A.centre = centr;
 A.idx=idx;
 A.SuperPatchs =SuperPatch;
 B = struct;
 B.im = imB;
 B.L = LB;
-B.graph = gB;
+B.graph = neighboors(gB);
 B.centre = centrB;
 B.idx=idxB;
 B.SuperPatchs =SuperPatchB;
