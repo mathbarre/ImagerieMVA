@@ -24,8 +24,8 @@ for i = 1:nbSuperPatchsA
           newMatchB{matchSuperPixelAInB} = newMatchB{matchSuperPixelAInB}((newMatchB{matchSuperPixelAInB}~=i));
       end
    end
+   
 end
-
 end
 
 function [newMatchForA,oldMatchToSwitch]=search(superpixelA,A,B,scale,epsilon,matchA,matchB,nbOfRandomCandidate)
@@ -34,13 +34,14 @@ oldMatchToSwitch = -1;
 matchSuperPixelAInB = matchA(superpixelA);
 [n,m,~] = size(B.im);
 c = B.centre(matchSuperPixelAInB).Centroid;
-w = [min([(m-c(1)),(c(1)-1)]),min([(n-c(2)),(c(2)-1)])];
+%w = [min([(m-c(1)),(c(1)-1)]),min([(n-c(2)),(c(2)-1)])];
 DistA = CheckDistance(superpixelA,matchSuperPixelAInB,A,B);
 minDist = DistA;
 finalCandidate = -1;
 for i = 1:nbOfRandomCandidate
     u = 2*rand([1,2])-1;
-    candidate = floor(c+scale*w.*u);
+    candidate =floor(c+scale*[m,n].*u);
+    candidate = [mod(candidate(1),m)+1,mod(candidate(2),n)+1];
     superpixelCandidate = B.L(candidate(2),candidate(1));
     newDist = CheckDistance(superpixelA,superpixelCandidate,A,B);
     if(newDist < minDist )
@@ -74,16 +75,7 @@ end
 
 function Cost = SwitchingCost(matchA,superpixel1,superpixel2,dist1_2,dist1_1,A,B)
     Cost = dist1_2 -dist1_1...
-        + CheckDistance(superpixel1,matchA(superpixel2),A,B) ...
+        + CheckDistance(superpixel2,matchA(superpixel1),A,B) ...
         - CheckDistance(superpixel2,matchA(superpixel2),A,B);
 end
 
-function Distance=CheckDistance(superpixelA,superpixelB,A,B)
-    global distanceMatrix;
-    if distanceMatrix(superpixelA,superpixelB) == -1 
-        Distance = distanceSuperPatchL2(superpixelA,superpixelB,A,B);
-        distanceMatrix(superpixelA,superpixelB) = Distance;
-    else 
-        Distance = distanceMatrix(superpixelA,superpixelB);
-    end
-end

@@ -98,16 +98,7 @@ end
 
 function Cost = SwitchingCost(matchA,superpixel1,superpixel2,dist1_2,dist1_1,A,B)
     Cost = dist1_2 -dist1_1...
-        + CheckDistance(superpixel1,matchA(superpixel2),A,B) ...
+        + CheckDistance(superpixel2,matchA(superpixel1),A,B) ...
         - CheckDistance(superpixel2,matchA(superpixel2),A,B);
 end
 
-function Distance=CheckDistance(superpixelA,superpixelB,A,B)
-    global distanceMatrix;
-    if distanceMatrix(superpixelA,superpixelB) == -1 
-        Distance = distanceSuperPatchL2(superpixelA,superpixelB,A,B);
-        distanceMatrix(superpixelA,superpixelB) = Distance;
-    else 
-        Distance = distanceMatrix(superpixelA,superpixelB);
-    end
-end
