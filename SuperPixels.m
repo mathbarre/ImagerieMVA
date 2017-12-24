@@ -1,9 +1,9 @@
 im = (imread('TP/im/scotland_house.png')); 
 imB = (imread('TP/im/scotland_plain.png')); 
-nbSuperPixelsWanted = 300;
-epsilon =5;
+nbSuperPixelsWanted = 350;
+epsilon =4;
 global R;
-R = 1;
+R = 50;
 %this step computes and return the super pixels
 %L is the matrix which has the same size as the image, each value
 %correspond to the superpixel the pixel belongs
@@ -73,6 +73,7 @@ gB = adjacentRegionsGraph(LB);
 SuperPatchB = getSuperPatch(centrB,R);
 
 
+
 A = struct;
 A.im = im;
 A.L = L;
@@ -105,6 +106,20 @@ for i = 1:12
     alpha=0.8*alpha;
     plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
 end
+
+global Q;
+Q = cell([1,N]);
+global A_bar;
+A_bar = cell([1,N]);
+
+TransformedImage = zeros(size(A.im));
+for p = 1:(numRows*numCols)
+   x = ceil(p/numRows);
+   y = mod(p-1,numRows)+1;
+   TransformedImage(y,x,:) = A_t(p,A,B,matchA) ;
+end
+
+figure;imshow(TransformedImage/255,[]);
 
 
 function plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
