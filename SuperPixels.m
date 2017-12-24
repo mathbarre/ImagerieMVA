@@ -1,9 +1,9 @@
 im = (imread('TP/im/scotland_house.png')); 
 imB = (imread('TP/im/scotland_plain.png')); 
-nbSuperPixelsWanted = 400;
-epsilon =3;
+nbSuperPixelsWanted = 300;
+epsilon =5;
 global R;
-R = 20;
+R = 1;
 %this step computes and return the super pixels
 %L is the matrix which has the same size as the image, each value
 %correspond to the superpixel the pixel belongs
@@ -94,20 +94,20 @@ global distanceSuperPixelMatrix;
 distanceSuperPixelMatrix = zeros([N,NB])-1;
 [matchA,matchB] = InitializeMatching(N,NB);
 meanDistance(A,B,matchA)
-plot(A,B,N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
+plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
 
 alpha =1.0;
-for i = 1:10
+for i = 1:12
     [matchA,matchB] = propagationStep(A,B,epsilon,matchA,matchB);
     meanDistance(A,B,matchA)
     [matchA,matchB] = randomSearchStep(A,B,alpha,epsilon,matchA,matchB,10);
     meanDistance(A,B,matchA)
     alpha=0.8*alpha;
-    plot(A,B,N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
+    plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
 end
 
 
-function plot(A,B,N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
+function plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
     for labelVal = 1:N
     redIdx = idx{labelVal};
     greenIdx = idx{labelVal}+numRows*numCols;

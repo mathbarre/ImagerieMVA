@@ -1,4 +1,4 @@
-function [newMatchA,newMatchB] = randomSearchStep(A,B,radius,epsilon,matchA,matchB,nbOfRandomCandidate)
+function [newMatchA,newMatchB] = randomSearchStep(A,B,scale,epsilon,matchA,matchB,nbOfRandomCandidate)
 %radius is the search radius
 [~,nbSuperPatchsA] = size(A.SuperPatchs);
 
@@ -7,7 +7,7 @@ newMatchA=matchA;
 newMatchB=matchB;
 
 for i = 1:nbSuperPatchsA
-   [newMatchForA,oldMatchToSwitch]=search(i,A,B,radius,epsilon,newMatchA,newMatchB,nbOfRandomCandidate);
+   [newMatchForA,oldMatchToSwitch]=search(i,A,B,scale,epsilon,newMatchA,newMatchB,nbOfRandomCandidate);
    if newMatchForA ~= -1
       if oldMatchToSwitch == -1
           matchedSuperPixelAInB = newMatchA(i);

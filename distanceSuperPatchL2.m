@@ -1,30 +1,30 @@
 function dist = distanceSuperPatchL2(SuperPixelCentralA,SuperPixelCentralB,A,B)
-    [h,w,~] = size(A.im);
-    [~,K] = size(A.SuperPatchs);
-    sigma21 = h*w/K/4;
-    global R;
-    sigma22 = 2*R^2;
-    ci = A.centre(SuperPixelCentralA).Centroid;
-    cj = B.centre(SuperPixelCentralB).Centroid;
-    [~, n] = size(A.SuperPatchs{SuperPixelCentralA});
-    [~, m] = size(B.SuperPatchs{SuperPixelCentralB});
-    weigthMatrix = zeros(n,m);
-    weightTimeDistBetweenPixelsMatrix = zeros(n,m);
-    for iPrime = 1:n
-        labelSuperPixelA = A.SuperPatchs{SuperPixelCentralA}(iPrime);
-        for jPrime = 1:m
-            labelSuperPixelB = B.SuperPatchs{SuperPixelCentralB}(jPrime);
-            ciPrime = A.centre(labelSuperPixelA).Centroid;
-            cjPrime = B.centre(labelSuperPixelB).Centroid;
-            weigthMatrix(iPrime,jPrime) = weightSuperPixels(ci, cj, ciPrime, cjPrime, sigma21, sigma22);
-            distSuperPixel =checkDistanceSuperpixel(labelSuperPixelA, labelSuperPixelB,A,B);
-            weightTimeDistBetweenPixelsMatrix(iPrime,jPrime) =  weigthMatrix(iPrime,jPrime) *distSuperPixel ;
-        end
-    end
-    
-    dist = sum(sum(weightTimeDistBetweenPixelsMatrix));
-    dist = dist / sum(sum(weigthMatrix));
-
+%     [h,w,~] = size(A.im);
+%     [~,K] = size(A.SuperPatchs);
+%     sigma21 = h*w/K/4;
+%     global R;
+%     sigma22 = 2*R^2;
+%     ci = A.centre(SuperPixelCentralA).Centroid;
+%     cj = B.centre(SuperPixelCentralB).Centroid;
+%     [~, n] = size(A.SuperPatchs{SuperPixelCentralA});
+%     [~, m] = size(B.SuperPatchs{SuperPixelCentralB});
+%     weigthMatrix = zeros(n,m);
+%     weightTimeDistBetweenPixelsMatrix = zeros(n,m);
+%     for iPrime = 1:n
+%         labelSuperPixelA = A.SuperPatchs{SuperPixelCentralA}(iPrime);
+%         for jPrime = 1:m
+%             labelSuperPixelB = B.SuperPatchs{SuperPixelCentralB}(jPrime);
+%             ciPrime = A.centre(labelSuperPixelA).Centroid;
+%             cjPrime = B.centre(labelSuperPixelB).Centroid;
+%             weigthMatrix(iPrime,jPrime) = weightSuperPixels(ci, cj, ciPrime, cjPrime, sigma21, sigma22);
+%             distSuperPixel =checkDistanceSuperpixel(labelSuperPixelA, labelSuperPixelB,A,B);
+%             weightTimeDistBetweenPixelsMatrix(iPrime,jPrime) =  weigthMatrix(iPrime,jPrime) *distSuperPixel ;
+%         end
+%     end
+%     
+%     dist = sum(sum(weightTimeDistBetweenPixelsMatrix));
+%     dist = dist / sum(sum(weigthMatrix));
+dist =checkDistanceSuperpixel(SuperPixelCentralA, SuperPixelCentralB,A,B);
 end
 
 function w = weightSuperPixels(ci, cj, ciPrime, cjPrime, sigma21, sigma22)
