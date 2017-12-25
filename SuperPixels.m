@@ -1,15 +1,16 @@
 im = (imread('TP/im/scotland_house.png')); 
 imB = (imread('TP/im/scotland_plain.png')); 
-nbSuperPixelsWanted = 350;
-epsilon =4;
+nbSuperPixelsWantedA = 350;
+nbSuperPixelsWantedB = 350;
+epsilon =5;
 global R;
 R = 50;
 %this step computes and return the super pixels
 %L is the matrix which has the same size as the image, each value
 %correspond to the superpixel the pixel belongs
 %N is the number of superpixels actually computed
-[L,N] = superpixels(im, nbSuperPixelsWanted);
-[LB,NB] = superpixels(imB, nbSuperPixelsWanted);
+[L,N] = superpixels(im, nbSuperPixelsWantedA);
+[LB,NB] = superpixels(imB, nbSuperPixelsWantedB);
 figure;
 BW = boundarymask(L);
 imshow(imoverlay(im,BW,'cyan'),[])
@@ -120,6 +121,8 @@ for p = 1:(numRows*numCols)
 end
 
 figure;imshow(TransformedImage/255,[]);
+Final = regrain(double(im)/255,TransformedImage/255);
+figure;imshow(Final,[]);
 
 
 function plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
