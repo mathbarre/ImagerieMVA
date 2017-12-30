@@ -1,8 +1,8 @@
 im = (imread('TP/im/scotland_house.png')); 
-imB = (imread('TP/im/scotland_plain.png')); 
+imB = (imread('TP/im/tropique.jpg')); 
 nbSuperPixelsWantedA = 350;
-nbSuperPixelsWantedB = 350;
-epsilon =5;
+nbSuperPixelsWantedB = 400;
+epsilon =3;
 global R;
 R = 50;
 %this step computes and return the super pixels
@@ -112,13 +112,29 @@ global Q;
 Q = cell([1,N]);
 global A_bar;
 A_bar = cell([1,N]);
+delta_s = 10;
+delta_c = 0.1;
+
+for i=1:N
+    A_i = idxToCoord(A.idx{i},numRows,numCols,A.im);
+    covX_i = cov(A_i(:,1:2));
+    covC_i = cov(A_i(:,3:5));
+    Qi = blkdiag(delta_s^2*covX_i,delta_c^2*covC_i);
+    Qi = inv(Qi);
+    Q{i} = Qi;
+    Abar = mean(A_i);
+    A_bar{i} = Abar;
+end
 
 TransformedImage = zeros(size(A.im));
+
+
 for p = 1:(numRows*numCols)
    x = ceil(p/numRows);
    y = mod(p-1,numRows)+1;
    TransformedImage(y,x,:) = A_t(p,A,B,matchA) ;
 end
+
 
 figure;imshow(TransformedImage/255,[]);
 Final = regrain(double(im)/255,TransformedImage/255);
