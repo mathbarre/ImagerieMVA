@@ -1,8 +1,17 @@
-im = (imread('TP/im/scotland_house.png')); 
-imB = (imread('TP/im/tropique.jpg')); 
-nbSuperPixelsWantedA = 350;
-nbSuperPixelsWantedB = 400;
-epsilon =3;
+%im = (imread('TP/im/scotland_house.png')); 
+pathImA = 'Results/scotland_plain_to_scotland_house_eps_3_R_50_regrain.png'
+pathImB = 'TP/im/scotland_house.png'
+im = (imread(pathImA));
+imB = (imread(pathImB)); 
+numRows = size(im,1);
+numCols = size(im,2);
+numRowsB = size(imB,1);
+numColsB = size(imB,2);
+
+nbSuperPixelsWantedA = round(numRows*numCols/500);
+nbSuperPixelsWantedB = round(numRowsB*numColsB/500)+20;
+
+epsilon = 3;
 global R;
 R = 50;
 %this step computes and return the super pixels
@@ -21,8 +30,6 @@ imshow(imoverlay(imB,BWB,'cyan'),[])
 
 outputImage = zeros(size(im),'like',im);
 idx = label2idx(L);
-numRows = size(im,1);
-numCols = size(im,2);
 for labelVal = 1:N
     redIdx = idx{labelVal};
     greenIdx = idx{labelVal}+numRows*numCols;
@@ -38,8 +45,7 @@ imshow(outputImage)
 
 outputImageB = zeros(size(imB),'like',imB);
 idxB = label2idx(LB);
-numRowsB = size(imB,1);
-numColsB = size(imB,2);
+
 for labelVal = 1:NB
     redIdx = idxB{labelVal};
     greenIdx = idxB{labelVal}+numRowsB*numColsB;
@@ -105,7 +111,7 @@ for i = 1:12
     [matchA,matchB] = randomSearchStep(A,B,alpha,epsilon,matchA,matchB,10);
     meanDistance(A,B,matchA)
     alpha=0.8*alpha;
-    plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
+    %plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
 end
 
 global Q;
@@ -140,6 +146,7 @@ figure;imshow(TransformedImage/255,[]);
 Final = regrain(double(im)/255,TransformedImage/255);
 figure;imshow(Final,[]);
 
+imwrite(Final, 'scotland_plain_to_scotland_house_eps_3_R_50_regrain.png');
 
 function plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
     for labelVal = 1:N
@@ -164,3 +171,4 @@ function meanDist = meanDistance(A,B,matchA)
     end
     meanDist = dist/n;
 end
+
