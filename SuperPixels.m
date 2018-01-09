@@ -1,6 +1,10 @@
 %im = (imread('TP/im/scotland_house.png')); 
-pathImA = 'Results/scotland_plain_to_scotland_house_eps_3_R_50_regrain.png'
-pathImB = 'TP/im/scotland_house.png'
+pathImA = 'TP/im/scotland_house.png';
+pathImB = 'TP/im/scotland_plain.png';
+nameA = strsplit(pathImA,{'/','.'});
+nameA = nameA{3};
+nameB = strsplit(pathImB,{'/','.'});
+nameB = nameB{3};
 im = (imread(pathImA));
 imB = (imread(pathImB)); 
 numRows = size(im,1);
@@ -20,12 +24,12 @@ R = 50;
 %N is the number of superpixels actually computed
 [L,N] = superpixels(im, nbSuperPixelsWantedA);
 [LB,NB] = superpixels(imB, nbSuperPixelsWantedB);
-figure;
+%figure;
 BW = boundarymask(L);
-imshow(imoverlay(im,BW,'cyan'),[])
-figure;
+%imshow(imoverlay(im,BW,'cyan'),[])
+%figure;
 BWB = boundarymask(LB);
-imshow(imoverlay(imB,BWB,'cyan'),[])
+%imshow(imoverlay(imB,BWB,'cyan'),[])
 
 
 outputImage = zeros(size(im),'like',im);
@@ -146,7 +150,8 @@ figure;imshow(TransformedImage/255,[]);
 Final = regrain(double(im)/255,TransformedImage/255);
 figure;imshow(Final,[]);
 
-imwrite(Final, 'scotland_plain_to_scotland_house_eps_3_R_50_regrain.png');
+imwrite(TransformedImage/255, strcat('Results/',nameB,'_on_',nameA,'_eps_',char(epsilon),'_R_',char(R),'.png'));
+imwrite(Final, strcat('Results/',nameB,'_on_',nameA,'_eps_',char(epsilon),'_R_',char(R),'_regrain.png'));
 
 function plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
     for labelVal = 1:N
