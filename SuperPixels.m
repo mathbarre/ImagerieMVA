@@ -164,8 +164,9 @@ figure;imshow(TransformedImage/255,[]);
 Final = regrain(double(im)/255,TransformedImage/255);
 figure;imshow(Final,[]);
 
-imwrite(TransformedImage/255, strcat('Results/',nameB,'_on_',nameA,'_eps_',char(epsilon),'_R_',char(R),'.png'));
-imwrite(Final, strcat('Results/',nameB,'_on_',nameA,'_eps_',char(epsilon),'_R_',char(R),'_regrain.png'));
+imwrite(TransformedImage/255, strcat('Results/',nameB,'_on_',nameA,'_eps_',num2str(epsilon),'_R_',num2str(R),'.png'));
+imwrite(Final, strcat('Results/',nameB,'_on_',nameA,'_eps_',num2str(epsilon),'_R_',num2str(R),'_regrain.png'));
+
 
 function plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
     for labelVal = 1:N
