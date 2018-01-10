@@ -1,27 +1,27 @@
-function newColor = A_t(idx_pixel,A,B,matchA)
+function newColor = A_t(idx_pixel,A,B,matchA,Q,A_bar)
     [nRows,nCols,~] = size(A.im);
     [nRowsB,nColsB,~] = size(B.im);
     p = idxToCoord(idx_pixel,nRows,nCols,A.im);
     label_Ai = A.L(idx_pixel);
     %Ai = idxToCoord(A.idx{label_Ai},nRows,nCols,A.im);
     %Qi = inv_covQ(label_Ai,10,0.1,Ai);
-    global A_bar;
-    global Q;
+    %global A_bar;
+    %global Q;
     Qi = Q{label_Ai};
     [~,sp]=size(A.SuperPatchs{label_Ai});
     w_ = zeros([1,sp]);
     colors = zeros([3,sp]);
-    for i = 1:sp
-       label_Aj =A.SuperPatchs{label_Ai}(i);
+    for j = 1:sp
+       label_Aj =A.SuperPatchs{label_Ai}(j);
        %Aj = idxToCoord(A.idx{label_Aj},nRows,nCols,A.im);
        %a = p-a_bar(label_Aj,Aj);
        a = p-A_bar{label_Aj};
-       w_(i) = -a*Qi*transpose(a);
+       w_(j) = -a*Qi*transpose(a);
        label_Bj = matchA(label_Aj);
        redIdx = B.idx{label_Bj};
        greenIdx = B.idx{label_Bj}+nRowsB*nColsB;
        blueIdx = B.idx{label_Bj}+2*nRowsB*nColsB;
-       colors(:,i) = [mean(B.im(redIdx)),mean(B.im(greenIdx)),mean(B.im(blueIdx))];
+       colors(:,j) = [mean(B.im(redIdx)),mean(B.im(greenIdx)),mean(B.im(blueIdx))];
        
     end
     sigma_p = max(w_);

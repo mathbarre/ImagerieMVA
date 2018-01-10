@@ -114,13 +114,13 @@ for i = 1:12
     meanDistance(A,B,matchA)
     [matchA,matchB] = randomSearchStep(A,B,alpha,epsilon,matchA,matchB,10);
     meanDistance(A,B,matchA)
-    alpha=0.8*alpha;
+    alpha=0.7*alpha;
     %plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
 end
 
-global Q;
+%global Q;
 Q = cell([1,N]);
-global A_bar;
+%global A_bar;
 A_bar = cell([1,N]);
 delta_s = 10;
 delta_c = 0.1;
@@ -136,15 +136,29 @@ for i=1:N
     A_bar{i} = Abar;
 end
 
+
+
 TransformedImage = zeros(size(A.im));
+% for p = 1:(numRows*numCols)
+%    x = ceil(p/numRows);
+%    y = mod(p-1,numRows)+1;
+%    TransformedImage(y,x,:) = A_t(p,A,B,matchA,Q,A_bar) ;
+% end
 
+TransformedImage1 = zeros([numRows,numCols]);
+TransformedImage2 = zeros([numRows,numCols]);
+TransformedImage3 = zeros([numRows,numCols]);
 
-for p = 1:(numRows*numCols)
-   x = ceil(p/numRows);
-   y = mod(p-1,numRows)+1;
-   TransformedImage(y,x,:) = A_t(p,A,B,matchA) ;
+parfor p = 1:(numRows*numCols)
+   a = A_t(p,A,B,matchA,Q,A_bar);
+   TransformedImage1(p) = a(1);
+   TransformedImage2(p) = a(2);
+   TransformedImage3(p) = a(3);
 end
 
+TransformedImage(:,:,1)= TransformedImage1;
+TransformedImage(:,:,2)= TransformedImage2;
+TransformedImage(:,:,3)= TransformedImage3;
 
 figure;imshow(TransformedImage/255,[]);
 Final = regrain(double(im)/255,TransformedImage/255);
