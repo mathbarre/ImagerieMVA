@@ -24,7 +24,7 @@ function dist = distanceSuperPatchL2(SuperPixelCentralA,SuperPixelCentralB,A,B)
 %     
 %     dist = sum(sum(weightTimeDistBetweenPixelsMatrix));
 %     dist = dist / sum(sum(weigthMatrix));
-dist =checkDistanceSuperpixel(SuperPixelCentralA, SuperPixelCentralB,A,B);
+    dist =checkDistanceSuperpixel(SuperPixelCentralA, SuperPixelCentralB,A,B);
 end
 
 function w = weightSuperPixels(ci, cj, ciPrime, cjPrime, sigma21, sigma22)

@@ -18,11 +18,11 @@ function newColor = A_t(idx_pixel,A,B,matchA,Q,A_bar)
        a = p-A_bar{label_Aj};
        w_(j) = -a*Qi*transpose(a);
        label_Bj = matchA(label_Aj);
-       redIdx = B.idx{label_Bj};
-       greenIdx = B.idx{label_Bj}+nRowsB*nColsB;
-       blueIdx = B.idx{label_Bj}+2*nRowsB*nColsB;
-       colors(:,j) = [mean(B.im(redIdx)),mean(B.im(greenIdx)),mean(B.im(blueIdx))];
-       
+       %redIdx = B.idx{label_Bj};
+       %greenIdx = B.idx{label_Bj}+nRowsB*nColsB;
+       %blueIdx = B.idx{label_Bj}+2*nRowsB*nColsB;
+       %colors(:,j) = [mean(B.im(redIdx)),mean(B.im(greenIdx)),mean(B.im(blueIdx))];
+       colors(:,j) = B.mean(label_Bj,:);
     end
     sigma_p = max(w_);
     w_ = exp(w_ - sigma_p);

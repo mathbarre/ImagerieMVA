@@ -13,7 +13,7 @@ numRowsB = size(imB,1);
 numColsB = size(imB,2);
 
 nbSuperPixelsWantedA = round(numRows*numCols/500);
-nbSuperPixelsWantedB = round(numRowsB*numColsB/500)+20;
+nbSuperPixelsWantedB = round(numRowsB*numColsB/500);
 
 epsilon = 3;
 global R;
@@ -50,13 +50,18 @@ imshow(outputImage)
 outputImageB = zeros(size(imB),'like',imB);
 idxB = label2idx(LB);
 
+meanB = zeros([NB,3]);
 for labelVal = 1:NB
     redIdx = idxB{labelVal};
     greenIdx = idxB{labelVal}+numRowsB*numColsB;
     blueIdx = idxB{labelVal}+2*numRowsB*numColsB;
-    outputImageB(redIdx) = mean(imB(redIdx));
-    outputImageB(greenIdx) = mean(imB(greenIdx));
-    outputImageB(blueIdx) = mean(imB(blueIdx));
+    mr = mean(imB(redIdx));
+    mg = mean(imB(greenIdx));
+    mb = mean(imB(blueIdx));
+    meanB(labelVal,:)=[mr,mg,mb];
+    outputImageB(redIdx) = mr;
+    outputImageB(greenIdx) = mg;
+    outputImageB(blueIdx) = mb;
 end    
 
 figure;
@@ -99,6 +104,7 @@ B.graph = neighboors(gB);
 B.centre = centrB;
 B.idx=idxB;
 B.SuperPatchs =SuperPatchB;
+B.mean = meanB;
 
 global distanceMatrix;
 distanceMatrix = zeros([N,NB])-1;
@@ -117,6 +123,7 @@ for i = 1:12
     alpha=0.7*alpha;
     %plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
 end
+plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
 
 %global Q;
 Q = cell([1,N]);
@@ -164,9 +171,8 @@ figure;imshow(TransformedImage/255,[]);
 Final = regrain(double(im)/255,TransformedImage/255);
 figure;imshow(Final,[]);
 
-imwrite(TransformedImage/255, strcat('Results/',nameB,'_on_',nameA,'_eps_',num2str(epsilon),'_R_',num2str(R),'.png'));
-imwrite(Final, strcat('Results/',nameB,'_on_',nameA,'_eps_',num2str(epsilon),'_R_',num2str(R),'_regrain.png'));
-
+%imwrite(TransformedImage/255, strcat('Results/',nameB,'_on_',nameA,'_eps_',num2str(epsilon),'_R_',num2str(R),'.png'));
+%imwrite(Final, strcat('Results/',nameB,'_on_',nameA,'_eps_',num2str(epsilon),'_R_',num2str(R),'_regrain.png'));
 
 function plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
     for labelVal = 1:N

@@ -2,7 +2,7 @@
 %renvoie cell array, superPatch{i} donne la liste des label des superpixels
 %contenu dans le superpatch de centre le superpixel-i
 function superPatch=getSuperPatch(centre,r)
-    [n,d]= size(centre);
+    [n,~]= size(centre);
     superPatch = {};
     for i = 1:n 
         l = [];
