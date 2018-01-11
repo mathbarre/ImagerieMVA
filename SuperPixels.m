@@ -89,7 +89,6 @@ gB = adjacentRegionsGraph(LB);
 SuperPatchB = getSuperPatch(centrB,R);
 
 
-
 A = struct;
 A.im = im;
 A.L = L;
@@ -97,6 +96,7 @@ A.graph = neighboors(g);
 A.centre = centr;
 A.idx=idx;
 A.SuperPatchs =SuperPatch;
+
 B = struct;
 B.im = imB;
 B.L = LB;
@@ -105,6 +105,28 @@ B.centre = centrB;
 B.idx=idxB;
 B.SuperPatchs =SuperPatchB;
 B.mean = meanB;
+
+histA = cell(N);
+histB = cell(NB);
+
+for i = 1:N 
+   histo = zeros([256,3]);
+   for c = 1:3
+       histo(:,c) = getHist(i,A,c-1);
+   end
+   histA{i} = histo;
+end
+
+for i = 1:NB 
+   histo = zeros([256,3]);
+   for c = 1:3
+       histo(:,c) = getHist(i,B,c-1);
+   end
+   histB{i} = histo;
+end
+
+A.hist = histA;
+B.hist = histB;
 
 global distanceMatrix;
 distanceMatrix = zeros([N,NB])-1;
@@ -198,3 +220,12 @@ function meanDist = meanDistance(A,B,matchA)
     meanDist = dist/n;
 end
 
+function histo = getHist(labelSuperPixel,A,  n)
+    [numRows,numCols, ~]  = size(A.im);
+    Idx = A.idx{labelSuperPixel};
+    Idx = Idx + n*numRows*numCols;
+    Values = A.im(Idx);
+    imhisto = hist(Values,[0:255]);  % or imhist(imgray(:),256); with Scilab 
+    imhisto =imhisto/sum(imhisto);
+    histo = cumsum(imhisto); 
+end

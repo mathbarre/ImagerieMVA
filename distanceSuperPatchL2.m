@@ -42,14 +42,16 @@ end
 
 function dist = distanceSuperPixelL2(labelSuperPixelA, labelSuperPixelB,A,B)
 %superPatchA is the list of the label of the superpixels in the superpatchA
-    dist = 0;
-    for color = 0:2
-        histA = getHist(labelSuperPixelA,A,  color);  
-        histB = getHist(labelSuperPixelB,B,  color) ;
-        diff2 = (histA - histB).^2;
-        dist = dist + sum(diff2);
-    end
-    dist = sqrt(dist);
+%    dist = 0;
+%    for color = 0:2
+%         histA = getHist(labelSuperPixelA,A,  color);  
+%         histB = getHist(labelSuperPixelB,B,  color) ;
+%         diff2 = (histA - histB).^2;
+%         dist = dist + sum(diff2);
+%    end
+    histA = A.hist{labelSuperPixelA};
+    histB = B.hist{labelSuperPixelB};
+    dist = sqrt(sum(sum((histA-histB).^2)));
 end
 
  function histo = getHist(labelSuperPixel,A,  n)
