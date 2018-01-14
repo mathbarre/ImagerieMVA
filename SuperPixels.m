@@ -1,23 +1,35 @@
 %im = (imread('TP/im/scotland_house.png')); 
-pathImA = 'TP/im/scotland_house.png';
-pathImB = 'TP/im/scotland_plain.png';
+%pathImA = 'TP/im/flower3.jpeg';
+%pathImB = 'TP/im/flower1.bmp';
+%pathImA = 'TP/im/forest_autumn.jpg';
+%pathImB = 'TP/im/forest_summer.jpg';
+%pathImB = 'TP/im/dicaprio.jpg';
+%pathImA = 'TP/im/avatar.jpg';
+%pathImA = 'TP/im/ice_dark.jpg';
+%pathImB = 'TP/im/ice_clear.jpg';
+pathImB = 'TP/im/sun_ice.jpg';
+pathImA = 'TP/im/sunset_ice.jpg';
+%pathImA = 'TP/im/flower3.jpeg';
+%pathImB = 'TP/im/flower2.bmp';
+%pathImA = 'TP/im/scotland_house.png';
+%pathImB = 'TP/im/scotland_plain.png';
 nameA = strsplit(pathImA,{'/','.'});
 nameA = nameA{3};
 nameB = strsplit(pathImB,{'/','.'});
 nameB = nameB{3};
 im = (imread(pathImA));
 imB = (imread(pathImB)); 
-numRows = size(im,1);
-numCols = size(im,2);
-numRowsB = size(imB,1);
-numColsB = size(imB,2);
+[numRows,numCols,~] = size(im);
+[numRowsB,numColsB,~] = size(imB);
 
-nbSuperPixelsWantedA = round(numRows*numCols/500);
-nbSuperPixelsWantedB = round(numRowsB*numColsB/500);
 
+nbSuperPixelsWantedA = round(numRows*numCols/500)-400;
+nbSuperPixelsWantedB = round(numRowsB*numColsB/500)+400;
+
+lambda = 0.01;
 epsilon = 3;
 global R;
-R = 50;
+R = 100;
 %this step computes and return the super pixels
 %L is the matrix which has the same size as the image, each value
 %correspond to the superpixel the pixel belongs
@@ -89,6 +101,7 @@ gB = adjacentRegionsGraph(LB);
 SuperPatchB = getSuperPatch(centrB,R);
 
 
+
 A = struct;
 A.im = im;
 A.L = L;
@@ -105,6 +118,17 @@ B.centre = centrB;
 B.idx=idxB;
 B.SuperPatchs =SuperPatchB;
 B.mean = meanB;
+
+O = [1/sqrt(3), 1/sqrt(3), 1/sqrt(3) ; 1/sqrt(2) -1/sqrt(2) 0; 1/sqrt(6) 1/sqrt(6) -2/sqrt(6)];
+A.opp = reshape(reshape(double(im),numRows*numCols,3)*O,numRows,numCols,3);
+B.opp = reshape(reshape(double(imB),numRowsB*numColsB,3)*O,numRowsB,numColsB,3);
+
+LMS = [0.3811 0.5783 0.0402 ; 0.1967 0.7244 0.0782 ; 0.0241 0.1288 0.8444];
+A.lms = log10(0.1+reshape(reshape(double(im),numRows*numCols,3)*LMS',numRows,numCols,3));
+B.lms = log10(0.1+reshape(reshape(double(imB),numRowsB*numColsB,3)*LMS',numRowsB,numColsB,3));
+
+A.lab = reshape(reshape(A.lms,numRows*numCols,3)*O,numRows,numCols,3);
+B.lab = reshape(reshape(B.lms,numRowsB*numColsB,3)*O,numRowsB,numColsB,3);
 
 histA = cell(N);
 histB = cell(NB);
@@ -134,7 +158,7 @@ global distanceSuperPixelMatrix;
 distanceSuperPixelMatrix = zeros([N,NB])-1;
 [matchA,matchB] = InitializeMatching(N,NB);
 meanDistance(A,B,matchA)
-plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
+%plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
 
 alpha =1.0;
 for i = 1:12
@@ -158,7 +182,7 @@ for i=1:N
     A_i = idxToCoord(A.idx{i},numRows,numCols,A.im);
     covX_i = cov(A_i(:,1:2));
     covC_i = cov(A_i(:,3:5));
-    Qi = blkdiag(delta_s^2*covX_i,delta_c^2*covC_i);
+    Qi = blkdiag(delta_s^2*covX_i,delta_c^2*covC_i)+lambda*diag(ones([1,5]));
     Qi = inv(Qi);
     Q{i} = Qi;
     Abar = mean(A_i);
@@ -193,8 +217,8 @@ figure;imshow(TransformedImage/255,[]);
 Final = regrain(double(im)/255,TransformedImage/255);
 figure;imshow(Final,[]);
 
-%imwrite(TransformedImage/255, strcat('Results/',nameB,'_on_',nameA,'_eps_',num2str(epsilon),'_R_',num2str(R),'.png'));
-%imwrite(Final, strcat('Results/',nameB,'_on_',nameA,'_eps_',num2str(epsilon),'_R_',num2str(R),'_regrain.png'));
+%imwrite(TransformedImage/255, strcat('Results/',nameB,'_on_',nameA,'_eps_',num2str(epsilon),'_lambda_',num2str(lambda),'_R_',num2str(R),'.png'));
+%imwrite(Final, strcat('Results/',nameB,'_on_',nameA,'_eps_',num2str(epsilon),'_lambda_',num2str(lambda),'_R_',num2str(R),'_regrain.png'));
 
 function plot(N,idx,idxB,numRows,numCols,numRowsB,numColsB,outputImage,imB,matchA)
     for labelVal = 1:N
