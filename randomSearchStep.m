@@ -38,9 +38,11 @@ c = B.centre(matchSuperPixelAInB).Centroid;
 DistA = CheckDistance(superpixelA,matchSuperPixelAInB,A,B);
 minDist = DistA;
 finalCandidate = -1;
-for i = 1:nbOfRandomCandidate
+%for i = 1:nbOfRandomCandidate
+radius = 1.0;
+while max(radius*[m,n])> 1 
     u = 2*rand([1,2])-1;
-    candidate =floor(c+scale*[m,n].*u);
+    candidate =floor(c+radius*[m,n].*u);
     candidate = [mod(candidate(1),m)+1,mod(candidate(2),n)+1];
     superpixelCandidate = B.L(candidate(2),candidate(1));
     newDist = CheckDistance(superpixelA,superpixelCandidate,A,B);
@@ -48,6 +50,7 @@ for i = 1:nbOfRandomCandidate
       minDist = newDist;
       finalCandidate = superpixelCandidate;
     end
+    radius = radius*scale;
 end
 
 if(finalCandidate ~= -1)
