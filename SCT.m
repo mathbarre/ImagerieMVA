@@ -25,7 +25,7 @@ function resultIm=SCT(imA,imB,epsilon,lambda,R,alpha,nbIter,nbSuperpixelWantedA,
     end
     
     
-    
+    %compute the matrix Q^-1 and the means A_bar in advance
     Q = cell([1,A.N]);
 
     A_bar = cell([1,A.N]);

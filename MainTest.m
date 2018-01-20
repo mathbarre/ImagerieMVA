@@ -1,6 +1,6 @@
 %im = (imread('im/scotland_house.png')); 
-pathImA = 'im/flower3.jpeg';
-pathImB = 'im/flower2.jpg';
+%pathImA = 'im/flower3.jpeg';
+%pathImB = 'im/flower2.jpg';
 %pathImA = 'im/forest_summer.jpg';
 %pathImB = 'im/forest_autumn.jpg';
 %pathImB = 'im/dicaprio.jpg';
@@ -9,8 +9,8 @@ pathImB = 'im/flower2.jpg';
 %pathImB = 'im/ice_clear.jpg';
 %pathImB = 'im/sun_ice.jpg';
 %pathImA = 'im/sunset_ice.jpg';
-%pathImB = 'im/flower1.jpg';
-%pathImA = 'im/flower2.jpg';
+pathImA = 'im/flower1.jpg';
+pathImB = 'im/flower2.jpg';
 %pathImA = 'im/ice_dark.jpg';
 %pathImB = 'im/sunset2.jpg';
 %pathImA = 'im/avatar.jpg';
@@ -42,11 +42,17 @@ nbSuperPixelsWantedA = round(numRows*numCols/500);
 nbSuperPixelsWantedB = nbSuperPixelsWantedA+20;
 
 lambda = 0.001;
-epsilon = 3;
+epsilon = 1;
 R = 50;
-
+delta_s = 40;
+delta_c = 0.4;
 % possible colorspace arg : 'rgb','opp','lms','lab','hsv'
-resSCT = SCT(im,imB,epsilon,lambda,R,0.7,15,nbSuperPixelsWantedA,nbSuperPixelsWantedB,10,0.1,'rgb');
+colorspace = 'rgb';
+alpha = 0.5;
+nbIter=20;
+
+
+resSCT = SCT(im,imB,epsilon,lambda,R,alpha,nbIter,nbSuperPixelsWantedA,nbSuperPixelsWantedB,delta_s,delta_c,colorspace);
 
 figure;imshow(resSCT,[]);
 Final = regrain(double(im)/255,resSCT);

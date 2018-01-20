@@ -25,8 +25,9 @@ function newColor = A_t(idx_pixel,A,B,matchA,Q,A_bar)
        colors(:,j) = B.mean(label_Bj,:);
     end
     sigma_p = max(w_);
-    w_ = exp(w_ - sigma_p);
-    sum_color = sum(w_.*colors,2)/sum(w_);
+    w_new = w_-sigma_p;
+    exp_w_ = exp(w_new);
+    sum_color = sum(exp_w_.*colors,2)/sum(exp_w_);
 
     newColor = sum_color;
     
