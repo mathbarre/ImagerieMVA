@@ -36,6 +36,10 @@ imB = (imread(pathImB));
 
 [numRows,numCols,~] = size(im);
 
+addpath('Graph')
+%decomment the next line when you add the folder of F.pitié from
+% https://github.com/frcs/colour-transfer
+%addpath('colour-transfer')
 
 nbSuperPixelsWantedA = round(numRows*numCols/500);
 %nbSuperPixelsWantedB = round(numRowsB*numColsB/500)+10;
