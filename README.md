@@ -5,7 +5,7 @@ IEEE International Conference on Image Processing (ICIP), 2017** which can be fo
 
 Files in Graph folder are taken from https://fr.mathworks.com/matlabcentral/fileexchange/16938-region-adjacency-graph--rag-.
 
-To make it all work, you should also include https://github.com/frcs/colour-transfer from **François Pitié**, in your folder.
+We also use the colour-transfert code https://github.com/frcs/colour-transfer from **François Pitié**.
 
 To test the implementation, you can launch MainTest.m and test with your images and parameters of your choice.
 
