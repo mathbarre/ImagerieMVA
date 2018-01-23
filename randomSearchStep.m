@@ -1,4 +1,5 @@
 function [newMatchA,newMatchB] = randomSearchStep(A,B,scale,epsilon,matchA,matchB,nbOfRandomCandidate)
+%random search step from the paper
 %radius is the search radius
 [~,nbSuperPatchsA] = size(A.SuperPatchs);
 
@@ -34,22 +35,23 @@ oldMatchToSwitch = -1;
 matchSuperPixelAInB = matchA(superpixelA);
 [n,m,~] = size(B.im);
 c = B.centre(matchSuperPixelAInB).Centroid;
-%w = [min([(m-c(1)),(c(1)-1)]),min([(n-c(2)),(c(2)-1)])];
 DistA = CheckDistance(superpixelA,matchSuperPixelAInB,A,B);
 minDist = DistA;
 finalCandidate = -1;
-%for i = 1:nbOfRandomCandidate
 radius = 1.0;
+
 while max(radius*[m,n])> 1 
     u = 2*rand([1,2])-1;
     candidate =floor(c+radius*[m,n].*u);
     candidate = [mod(candidate(1),m)+1,mod(candidate(2),n)+1];
     superpixelCandidate = B.L(candidate(2),candidate(1));
     newDist = CheckDistance(superpixelA,superpixelCandidate,A,B);
+    
     if(newDist < minDist )
       minDist = newDist;
       finalCandidate = superpixelCandidate;
     end
+    
     radius = radius*scale;
 end
 

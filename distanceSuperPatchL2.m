@@ -1,4 +1,9 @@
 function dist = distanceSuperPatchL2(SuperPixelCentralA,SuperPixelCentralB,A,B)
+    %Comput the distance between two superpatchs, currently compute
+    % histogram L2 distance between central superpixels.
+    %To compute the distance between global superpatchs, decomment the
+    %following code
+
 %     [h,w,~] = size(A.im);
 %     [~,K] = size(A.SuperPatchs);
 %     sigma21 = h*w/K/4;
@@ -42,27 +47,11 @@ end
 
 function dist = distanceSuperPixelL2(labelSuperPixelA, labelSuperPixelB,A,B)
 %superPatchA is the list of the label of the superpixels in the superpatchA
-%    dist = 0;
-%    for color = 0:2
-%         histA = getHist(labelSuperPixelA,A,  color);  
-%         histB = getHist(labelSuperPixelB,B,  color) ;
-%         diff2 = (histA - histB).^2;
-%         dist = dist + sum(diff2);
-%    end
     histA = A.hist{labelSuperPixelA};
     histB = B.hist{labelSuperPixelB};
     dist = sqrt(sum(sum((histA-histB).^2)));
 end
 
- function histo = getHist(labelSuperPixel,A,  n)
-    [numRows,numCols, ~]  = size(A.im);
-    Idx = A.idx{labelSuperPixel};
-    Idx = Idx + n*numRows*numCols;
-    Values = A.im(Idx);
-    imhisto = hist(Values,[0:255]);  % or imhist(imgray(:),256); with Scilab 
-    imhisto =imhisto/sum(imhisto);
-    histo = cumsum(imhisto); 
- end
 
  function Distance=checkDistanceSuperpixel(superpixelA, superpixelB,A,B)
     global distanceSuperPixelMatrix;

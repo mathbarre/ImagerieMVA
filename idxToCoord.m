@@ -1,4 +1,6 @@
-function coord=idxToCoord(id,nRows,nCols,im)%x abscisses , y ordonnee
+function coord=idxToCoord(id,nRows,nCols,im)
+    % transform the index id into 2D coords for the image
+    %x abscisses , y ordonnee
     x = ceil(id/nRows);
     y = mod(id-1,nRows)+1;
     red = double(im(id));

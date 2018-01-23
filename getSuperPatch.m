@@ -1,7 +1,6 @@
-%very naive
-%renvoie cell array, superPatch{i} donne la liste des label des superpixels
-%contenu dans le superpatch de centre le superpixel-i
 function superPatch=getSuperPatch(centre,r)
+    %very naive
+    %return cell array, superPatch{i} list of labels of superpixels
     [n,~]= size(centre);
     superPatch = {};
     for i = 1:n 

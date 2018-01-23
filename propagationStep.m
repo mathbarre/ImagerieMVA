@@ -1,4 +1,5 @@
 function [newMatchA,newMatchB]=propagationStep(A,B,epsilon,matchA,matchB)
+%propagation step from the article
 
 [~,nbSuperPatchsA] = size(A.SuperPatchs);
 
@@ -6,6 +7,7 @@ function [newMatchA,newMatchB]=propagationStep(A,B,epsilon,matchA,matchB)
 newMatchA=matchA;
 newMatchB=matchB;
 
+%from top left to bottom right
 for i = 1:nbSuperPatchsA
    neighboorsA = A.graph{i};
    for nei = neighboorsA
@@ -30,6 +32,8 @@ for i = 1:nbSuperPatchsA
        end
    end
 end
+
+%from bottom right to top left
 for j = fliplr(1:nbSuperPatchsA)
    neighboorsA = A.graph{j};
    for nei = neighboorsA
@@ -58,25 +62,24 @@ end
 
 end
 
-%superPixelA = label du superPixel, neighboorA = label d'un superPixels
-%voisin de A, matchA = array Superpixel de A --> superpixel de B,
-%matchB = cell array , superpixel de B --> list superpixel de A
+% matchA = map from Superpixels of A to superpixel of B,
+%matchB = map from superpixels of B to list superpixel of A
 function [newMatchForA,oldMatchToSwitch]=permutMatch(A,B,superpixelA,neighboorA,epsilon,matchA,matchB)
  
     newMatchForA = -1;
     oldMatchToSwitch = -1;
     
     theta = angleBetweenCentre(A.centre,superpixelA,neighboorA); % angle i_i'
-    matchSuperPixelAInB = matchA(superpixelA); %le label du superPatch = label du superPixel matché à superPixelA 
-    neighboorsMatchSuperPixelAInB = B.graph{matchSuperPixelAInB}; % les voisins du superPixel precedent
+    matchSuperPixelAInB = matchA(superpixelA); % label of superPatch = label of superPixel matched to superPixelA 
+    neighboorsMatchSuperPixelAInB = B.graph{matchSuperPixelAInB}; % neighboors of previous superpixel
     
-    goodOrientationB = minimumAngle(matchSuperPixelAInB,theta,B.centre,neighboorsMatchSuperPixelAInB); % le superPixel de B qui correspond à la meilleur orientation
-    newDist = CheckDistance(superpixelA,goodOrientationB,A,B);% nouvelle distance entre patchs centrés en superpixelA et goodOrientationB
+    goodOrientationB = minimumAngle(matchSuperPixelAInB,theta,B.centre,neighboorsMatchSuperPixelAInB); % superPixel of B with best orientation
+    newDist = CheckDistance(superpixelA,goodOrientationB,A,B);
     DistA = CheckDistance(superpixelA,matchSuperPixelAInB,A,B);
     
     if(newDist < DistA )
        [~,eps] =  size(matchB{goodOrientationB});
-       if (eps < epsilon)%on met goodOrientation comme match pour superPixelsA et on enlève superpixelA de la liste des patch matché avec matchSuperPixelAInB
+       if (eps < epsilon)%goodOrientationB replace the previous match
             newMatchForA = goodOrientationB;
        else
            cost = 100000;
